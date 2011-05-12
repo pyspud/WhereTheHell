@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
@@ -15,11 +20,26 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class WhereTheHell extends Activity {
+public class WhereTheHell extends MapActivity {
+	
+	MapController mapController;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        // Get the reference to map view
+        MapView myMapView = (MapView)findViewById(R.id.myMapView);
+        mapController = myMapView.getController();
+        
+        // Configure the map display
+        myMapView.setSatellite(true);
+        myMapView.setStreetView(true);
+        myMapView.displayZoomControls(false);
+        
+        // Zoom in to location
+        mapController.setZoom(17);
         
         LocationManager locationManager;
         String context = Context.LOCATION_SERVICE;
@@ -63,6 +83,12 @@ public class WhereTheHell extends Activity {
     		double lon = _location.getLongitude();
     		latLonString = "Lat: " + lat + "\nLon: " + lon;
     		
+    		// Update map location
+    		Double geoLat = lat*1E6;
+    		Double geoLon = lon*1E6;
+    		GeoPoint point = new GeoPoint(geoLat.intValue(), geoLon.intValue());
+    		mapController.animateTo(point);
+    		
     		Geocoder gc = new Geocoder(this, Locale.getDefault());
     		try {
     			List<Address> addresses = gc.getFromLocation(lat, lon, 1);
@@ -85,4 +111,9 @@ public class WhereTheHell extends Activity {
     	myLocationText.setText("Your location is:\n"+ latLonString + "\n"
     			+ addressString);
     }
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
 }

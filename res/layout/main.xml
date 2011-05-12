@@ -4,10 +4,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-	android:id="@+id/myLocationText"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/defaultmsg"
+	<TextView  
+		android:id="@+id/myLocationText"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="@string/defaultmsg"
     />
+    <com.google.android.maps.MapView
+    	android:id="@+id/myMapView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:enabled="true"
+        android:clickable="true"
+    	android:apiKey="0kgf0I9FcNI61OmL1yjgPvJ8axXAh3WgKIq4dNg"
+	/><!-- ApiKey is for "androiddebugkey" -->
 </LinearLayout>
