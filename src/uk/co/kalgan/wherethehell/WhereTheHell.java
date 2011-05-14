@@ -8,8 +8,8 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 public class WhereTheHell extends MapActivity {
 	
 	MapController mapController;
+	MyPositionOverlay positionOverlay;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,11 @@ public class WhereTheHell extends MapActivity {
         
         // Zoom in to location
         mapController.setZoom(17);
+        
+        // Add the overlay
+        positionOverlay = new MyPositionOverlay();
+        List<Overlay> overlays = myMapView.getOverlays();
+        overlays.add(positionOverlay);
         
         LocationManager locationManager;
         String context = Context.LOCATION_SERVICE;
@@ -79,6 +85,9 @@ public class WhereTheHell extends MapActivity {
     	String addressString = "No address found";
     	
     	if (_location != null) {
+    		// Update location marker
+    		positionOverlay.setLocation(_location);
+    		
     		double lat = _location.getLatitude();
     		double lon = _location.getLongitude();
     		latLonString = "Lat: " + lat + "\nLon: " + lon;
